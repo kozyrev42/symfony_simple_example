@@ -1,0 +1,8 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+api_test:
+    path: /api/test
+    controller: App\Controller\TestApiController::test
+    methods: GET
