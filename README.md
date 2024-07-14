@@ -11,3 +11,7 @@
  - создан тестовый роут в файле: config/routes.yaml
 
  - создан тестовый обработчик в файле: src/Controller/TestApiController.php
+
+2. Установил на Ubuntu Symfony CLI
+
+Жизненный цикл запроса в Symfony.
