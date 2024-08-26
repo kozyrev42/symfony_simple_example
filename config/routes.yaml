@@ -11,3 +11,18 @@ api_post_create:
     path: /api/post/create
     controller: App\Controller\Post\PostController::create
     methods: POST
+
+get_all_posts:
+    path: /api/posts
+    controller: App\Controller\Post\PostController::getAllPosts
+    methods: GET
+
+update_post:
+    path: /api/post/{id}
+    controller: App\Controller\Post\PostController::updatePost
+    methods: PUT
+
+delete_post:
+    path: /api/post/{id}
+    controller: App\Controller\Post\PostController::deletePost
+    methods: DELETE

@@ -29,4 +29,10 @@ class PostRepository extends ServiceEntityRepository
         $this->entityManager->persist($post);
         $this->entityManager->flush();
     }
+
+    public function remove(Post $post): void
+    {
+        $this->entityManager->remove($post);
+        $this->entityManager->flush();
+    }
 }
