@@ -6,16 +6,17 @@ use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\Table(name: 'posts')]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue] // означает что это поле будет автоинкрементироваться
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private ?int $id = null; // любое значение типа int, или по умолчанию null
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 255)] // означает что в БД это varchar(255)
+    #[Assert\NotBlank] // означает что поле не может быть пустым
     private string $title;
 
     #[ORM\Column(type: 'text')]

@@ -32,3 +32,5 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:migrations:migrate prev
 
 7. Созданы: Миграция, Сущность, Репозитотрий, Команда консольная для создания поста.
+
+8. Добавлен контроллер для обработки http-запроса. Создание поста.

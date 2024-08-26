@@ -6,3 +6,8 @@ api_test:
     path: /api/test
     controller: App\Controller\TestApiController::test
     methods: GET
+
+api_post_create:
+    path: /api/post/create
+    controller: App\Controller\Post\PostController::create
+    methods: POST

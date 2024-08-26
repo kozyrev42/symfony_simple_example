@@ -9,12 +9,21 @@ use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
+ * 
+ * накатить миграции
+ * php bin/console doctrine:migrations:migrate
+
+ * откатить последнюю миграцию
+ * php bin/console doctrine:migrations:migrate prev
+ * 
+ * php bin/console doctrine:migrations:diff
+ * команда создаст файл-миграцию, на основе entity, если такой миграции ещё не было создано
  */
 final class Version20240823131101 extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE post (
+        $this->addSql('CREATE TABLE posts (
             id SERIAL PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
             body TEXT NOT NULL
@@ -23,6 +32,6 @@ final class Version20240823131101 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE post');
+        $this->addSql('DROP TABLE posts');
     }
 }

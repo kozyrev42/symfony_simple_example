@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
 
+// вызов команды: php bin/console post:create
+
 #[AsCommand(
     name: 'post:create',
     description: 'Создать новый пост'
