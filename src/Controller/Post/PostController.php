@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Form\PostType;
 
 class PostController extends AbstractController
 {
@@ -22,18 +23,19 @@ class PostController extends AbstractController
 
     public function create(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        $title = $data['title'] ?? null;
-        $body = $data['body'] ?? null;
-
-        if (!$title || !$body) {
-            return new JsonResponse(['error' => 'Название и содержание обязательны для заполнения'], Response::HTTP_BAD_REQUEST);
-        }
-
         $post = new Post();
-        $post->setTitle($title);
-        $post->setBody($body);
+        $form = $this->createForm(PostType::class, $post);
+
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+
+        if (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true, true) as $error) {
+                $errors[] = $error->getMessage();
+            }
+            return new JsonResponse(['error' => $errors], Response::HTTP_BAD_REQUEST);
+        }
 
         $this->postRepository->save($post);
 
