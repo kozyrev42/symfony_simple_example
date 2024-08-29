@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Category;
 
 #[ORM\Table(name: 'posts')]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -22,6 +23,10 @@ class Post
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
     private string $body;
+
+    #[ORM\ManyToOne(targetEntity: Category::class)] // категория будет подтягиваться из таблицы category
+    #[ORM\JoinColumn(nullable: true)] // означает что поле может быть null
+    private $category;
 
     public function getId(): ?int
     {
@@ -47,6 +52,18 @@ class Post
     public function setBody(string $body): self
     {
         $this->body = $body;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
         return $this;
     }
 }

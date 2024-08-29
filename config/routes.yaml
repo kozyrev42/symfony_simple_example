@@ -12,6 +12,11 @@ api_post_create:
     controller: App\Controller\Post\PostController::create
     methods: POST
 
+get_post_by_id:
+    path: /api/post/{id}
+    controller: App\Controller\Post\PostController::getPost
+    methods: GET
+
 get_all_posts:
     path: /api/posts
     controller: App\Controller\Post\PostController::getAllPosts
