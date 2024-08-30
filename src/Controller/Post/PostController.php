@@ -100,6 +100,15 @@ class PostController extends AbstractController
             $post->setBody($data['body']);
         }
 
+        if (isset($data['category_id'])) {
+            $category = $this->categoryRepository->find($data['category_id']);
+            if ($category) {
+                $post->setCategory($category);
+            } else {
+                return new JsonResponse(['error' => 'Категория не существует.'], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
         $this->postRepository->save($post);
 
         $json = $serializer->serialize($post, 'json');
