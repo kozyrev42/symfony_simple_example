@@ -25,8 +25,12 @@ class Post
     private string $body;
 
     #[ORM\ManyToOne(targetEntity: Category::class)] // категория будет подтягиваться из таблицы category
-    #[ORM\JoinColumn(nullable: true)] // означает что поле может быть null
-    private $category;
+    #[ORM\JoinColumn(               // используется для настройки соединения между двумя таблицами
+        name: "category_id",        // имя столбца в таблице posts
+        referencedColumnName: "id", // имя столбца в таблице category
+        nullable: true,             // означает что поле может быть null
+    )]
+    private $category;              // потом в $category будет храниться объект Category
 
     public function getId(): ?int
     {
@@ -55,7 +59,7 @@ class Post
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function getCategory(): ?Category // возвращаемое значение может быть null
     {
         return $this->category;
     }
