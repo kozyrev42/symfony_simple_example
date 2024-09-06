@@ -3,6 +3,7 @@
 namespace App\Controller\Post;
 
 use App\Entity\Post;
+use App\Entity\Tag;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Validator\PostValidator;
 use App\Repository\CategoryRepository;
+use App\Repository\TagRepository;
 
 class PostController extends AbstractController
 {
@@ -19,17 +21,20 @@ class PostController extends AbstractController
     private PostValidator $postValidator;
     private CategoryRepository $categoryRepository;
     private SerializerInterface $serializer;
+    private TagRepository $tagRepository;
 
     public function __construct(
         PostRepository $postRepository,
         PostValidator $postValidator,
         CategoryRepository $categoryRepository,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        TagRepository $tagRepository,
     ) {
         $this->postRepository = $postRepository;
         $this->postValidator = $postValidator;
         $this->categoryRepository = $categoryRepository;
         $this->serializer = $serializer;
+        $this->tagRepository = $tagRepository;
     }
 
     public function create(Request $request): JsonResponse
@@ -55,6 +60,18 @@ class PostController extends AbstractController
             }
         }
 
+        if (isset($data['tags']) && is_array($data['tags'])) {
+            foreach ($data['tags'] as $tagName) {
+                $tag = $this->tagRepository->findOneBy(['name' => $tagName]);
+                if (!$tag) {
+                    $tag = new Tag();
+                    $tag->setName($tagName);
+                    $this->tagRepository->save($tag);
+                }
+                $post->addTag($tag);
+            }
+        }
+    
         $this->postRepository->save($post);
 
         return new JsonResponse(['success' => 'Пост создан успешно!'], Response::HTTP_CREATED);
