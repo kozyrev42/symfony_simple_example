@@ -64,14 +64,16 @@ class PostController extends AbstractController
             foreach ($data['tags'] as $tagName) {
                 $tag = $this->tagRepository->findOneBy(['name' => $tagName]);
                 if (!$tag) {
+                    // если условие выполняется, то создаем новый тег в таблице "tags"
                     $tag = new Tag();
                     $tag->setName($tagName);
                     $this->tagRepository->save($tag);
                 }
+                // добавляем сущность Тег к сущности Пост
                 $post->addTag($tag);
             }
         }
-    
+        // при сохранении поста в таблице "posts", создаются связи с таблицей "tags_to_post", с созданными тегами 
         $this->postRepository->save($post);
 
         return new JsonResponse(['success' => 'Пост создан успешно!'], Response::HTTP_CREATED);
