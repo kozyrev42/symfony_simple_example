@@ -128,8 +128,44 @@ class PostController extends AbstractController
             }
         }
 
-        $this->postRepository->save($post);
+        // Логика обновления тегов
+        if (isset($data['tags']) && is_array($data['tags'])) {
+            $existingTags = $post->getTags(); // Получаем текущие теги поста
+            $existingTagNames = [];
 
+            // Создаем массив имен текущих тегов для быстрого поиска
+            foreach ($existingTags as $existingTag) {
+                $existingTagNames[] = $existingTag->getName();
+            }
+
+            // Обрабатываем новые теги из запроса
+            foreach ($data['tags'] as $tagName) {
+                // в теле условия if проверяем, есть ли уже такой тег в базе данных
+                if (!in_array($tagName, $existingTagNames)) {
+
+                    $tag = $this->tagRepository->findOneBy(['name' => $tagName]);
+
+                    if (!$tag) {
+                        // Создаем новый тег, если его нет в базе данных
+                        $tag = new Tag();
+                        $tag->setName($tagName);
+                        $this->tagRepository->save($tag);
+                    }
+
+                    // Добавляем новый тег к посту
+                    $post->addTag($tag);
+                }
+            }
+
+            // Удаляем теги, которые не присутствуют в новом списке тегов
+            foreach ($existingTags as $existingTag) {
+                if (!in_array($existingTag->getName(), $data['tags'])) {
+                    $post->removeTag($existingTag);
+                }
+            }
+        }
+
+        $this->postRepository->save($post);
         $json = $serializer->serialize($post, 'json');
 
         return new JsonResponse($json, Response::HTTP_OK, [], true);
